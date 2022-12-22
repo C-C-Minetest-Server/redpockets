@@ -20,6 +20,20 @@ for _,y in ipairs(values_all) do
 	end
 end
 
+local awards_exist = minetest.get_modpath("awards")
+if awards_exist then
+	awards.register_award("redpockets:pack", {
+		title = S("It's more blessed to give than to receive"),
+		description = S("Pack a red pocket with a value higher than 10MG."),
+		icon = "redpockets_money.png",
+	})
+	awards.register_award("redpockets:take", {
+		title = S("Happy New Year!"),
+		description = S("Receive and open a red packet from others."),
+		icon = "redpockets_used.png",
+	})
+end
+
 local function get_best_combination(value)
 	print("val recv " .. value)
 	local stacks = {}
@@ -41,6 +55,7 @@ end
 
 minetest.register_craftitem("redpockets:unused",{
 	description = S("Unused Red Pocket"),
+	_tt_help = S("A money gift, usually given during the Chinese New Year in China."),
 	_doc_items_longdesc = S("A money gift, usually given during the Chinese New Year in China."),
 	_doc_items_usagehelp = S("By putting an unused red pocket and currencies into the crafting grid, a red pocket with money is returned."),
 	inventory_image = "redpockets_unused.png",
@@ -61,6 +76,11 @@ local function on_money_use(itemstack, user, pointed_thing)
 		for _,i in ipairs(stacks) do
 			inv:add_item("main",i)
 		end
+		local self_pname = user:get_player_name()
+		local give_pname = meta:get_string("from")
+		if awards_exist and self_pname ~= give_pname then
+			awards.unlock(self_pname,"redpockets:take")
+		end
 	else
 		if user:is_player() then
 			minetest.chat_send_player(user:get_player_name(),S("This red pocket is corrupted. It does not contain any money."))
@@ -71,6 +91,7 @@ end
 
 minetest.register_craftitem("redpockets:money",{
 	description = S("Red Pocket with Money"),
+	_tt_help = S("A money gift, usually given during the Chinese New Year in China."),
 	_doc_items_longdesc = S("A money gift, usually given during the Chinese New Year in China."),
 	_doc_items_usagehelp = S("Give this little red pocket to whomever you want, right-click with the pocket to take the money out."),
 	inventory_image = "redpockets_money.png",
@@ -82,6 +103,7 @@ minetest.register_craftitem("redpockets:money",{
 
 minetest.register_craftitem("redpockets:used",{
 	description = S("Used Red Pocket"),
+	_tt_help = S("The remains of a red pocket after taking out the money inside it."),
 	_doc_items_longdesc = S("The remains of a red pocket after taking out the money inside it."),
 	_doc_items_usagehelp = S("The remains of a red pocket, tore in order to take the money out. It cannot be reused, and should end up in a furnace's fuel slot."),
 	inventory_image = "redpockets_used.png",
@@ -112,8 +134,32 @@ minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv
 			local pname = player:get_player_name()
 			local meta = itemstack:get_meta()
 			meta:set_string("description",S("Red Pocket with Money by @1",pname))
+			meta:set_string("from",pname)
 			meta:set_int("money",value)
+			if value >= 10 and awards_exist then
+				awards.unlock(pname,"redpockets:pack")
+			end
 			return itemstack
 		end
 	end
 end)
+
+minetest.register_craft_predict(function(itemstack, player, old_craft_grid, craft_inv)
+	if itemstack:get_name() ~= "redpockets:money" then return end
+	for _,i in ipairs(old_craft_grid) do
+		if i:get_name() == "redpockets:unused" then
+			local value = 0
+			for _,m in ipairs(old_craft_grid) do
+				if exist_notes[m:get_name()] then
+					value = value + exist_notes[m:get_name()]
+				end
+			end
+			if value == 0 then return end
+			local meta = itemstack:get_meta()
+			meta:set_string("description",S("Red Pocket with Money (@1MG)",value))
+			return
+		end
+	end
+end)
+
+
