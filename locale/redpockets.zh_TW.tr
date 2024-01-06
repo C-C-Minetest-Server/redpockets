@@ -1,6 +1,9 @@
 # textdomain: redpockets
 
-### c_currency.lua ###
+It's more blessed to give than to receive=施比受更爲有福
+Pack a red pocket with a value higher than 10MG.=包好內含高於10MG的紅包。
+Happy New Year!=新年快樂！
+Receive and open a red packet from others.=收到並開啓別人送贈的紅包。
 Unused Red Pocket=未使用的紅包
 By putting an unused red pocket and currencies into the crafting grid, a red pocket with money is returned.=通過將一個未使用的紅包和紙幣放在合成框裏，可獲得一個封好的紅包。
 This red pocket is corrupted. It does not contain any money.=這個紅包是損壞的，並沒有任何紙幣在裏面。
@@ -11,11 +14,6 @@ The remains of a red pocket after taking out the money inside it.=取出紙幣�
 The remains of a red pocket, tore in order to take the money out. It cannot be reused, and should end up in a furnace's fuel slot.=爲了取出紙幣而被撕開的紅包。使用過的紅包無法被重用，是熔爐的絕佳燃料。
 Red Pocket with Money by @1=封好的紅包（由 @1 送贈）
 Red Pocket with Money (@1MG)=封好的紅包（@1MG）
-
-### c_currency.lua ###
-### c_none.lua ###
 A money gift, usually given during the Chinese New Year in China.=內含金錢的禮物，通常在農曆新年期間送贈。
-
-### c_none.lua ###
 Red Pocket=紅包
 No money can be put into this red pocket due to the absence of the Currency mod. This item can only act as a decoration, or as a fuel for furnaces.=因爲 Currency 模組不存在，無法在紅包裏面放置任何金錢。因此，紅包只能用作裝飾或熔爐燃料。

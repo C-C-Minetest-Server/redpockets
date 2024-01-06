@@ -11,9 +11,9 @@ if minetest.get_modpath("default") and minetest.get_modpath("dye") then
 	minetest.register_craft({
 		output = "redpockets:unused",
 		recipe = {
-			{paper,glue,paper},
-			{paper,dye,paper},
-			{paper,paper,paper}
+			{ paper, glue,  paper },
+			{ paper, dye,   paper },
+			{ paper, paper, paper }
 		},
 	})
 end
