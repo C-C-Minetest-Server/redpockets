@@ -60,10 +60,8 @@ if awards_exist then
 end
 
 local function get_best_combination(value)
-	print("val recv " .. value)
 	local stacks = {}
 	for _, y in pairs(values) do
-		print("ent vals loop " .. y[1] .. " corrval " .. y[2] .. " val " .. value)
 		if value >= y[2] then
 			local count = math.floor(value / y[2])
 			value = value - (count * y[2])
@@ -73,7 +71,6 @@ local function get_best_combination(value)
 				table.insert(stacks, stack)
 			end
 		end
-		print("leave vals loop " .. y[1] .. " dump " .. dump(stacks))
 	end
 	return stacks
 end
