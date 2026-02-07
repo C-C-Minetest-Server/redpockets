@@ -36,10 +36,11 @@ core.register_craft({
 	burntime = 1,
 })
 
-if core.get_modpath("default") and core.get_modpath("dye") then
+if core.global_exists("xcompat") then
 	local glue = core.get_modpath("mesecons_materials") and "mesecons_materials:glue" or ""
-	local paper = "default:paper"
-	local dye = "dye:red"
+	local paper = xcompat.materials.paper
+	local dye = xcompat.materials.dye_red
+
 	core.register_craft({
 		output = "redpockets:unused",
 		recipe = {

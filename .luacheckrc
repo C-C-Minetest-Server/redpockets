@@ -19,6 +19,7 @@ read_globals = {
     "vector",
 
     "awards",
+    "xcompat",
 
     table = {
         fields = {
