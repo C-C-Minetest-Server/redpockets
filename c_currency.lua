@@ -22,7 +22,9 @@
 	SOFTWARE.
 ]]
 
-local S = minetest.get_translator("redpockets")
+local S = core.get_translator("redpockets")
+
+local awards_exist = core.global_exists("awards")
 
 local values_all = {
 	{ "currency:minegeld_100", 100 },
@@ -34,17 +36,17 @@ local values_all = {
 local values = {}
 local exist_notes = {}
 for _, y in ipairs(values_all) do
-	if minetest.registered_craftitems[y[1]] then
+	if core.registered_craftitems[y[1]] then
 		table.insert(values, y)
 		exist_notes[y[1]] = y[2]
 
-		local groups = minetest.registered_craftitems[y[1]].groups or {}
+		local groups = core.registered_craftitems[y[1]].groups or {}
 		groups.redpocket_banknotes = 1
-		minetest.override_item(y[1], { groups = groups })
+		core.override_item(y[1], { groups = groups })
 	end
 end
 
-if minetest.get_modpath("awards") then
+if awards_exist then
 	awards.register_award("redpockets:pack", {
 		title = S("It's more blessed to give than to receive"),
 		description = S("Pack a red pocket with a value higher than 10MG."),
@@ -76,17 +78,17 @@ local function get_best_combination(value)
 	return stacks
 end
 
-minetest.register_craftitem("redpockets:unused", {
+core.register_craftitem("redpockets:unused", {
 	description = S("Unused Red Pocket"),
 	_tt_help = S("A money gift, usually given during the Chinese New Year in China."),
 	_doc_items_longdesc = S("A money gift, usually given during the Chinese New Year in China."),
 	_doc_items_usagehelp = S(
-	"By putting an unused red pocket and currencies into the crafting grid, a red pocket with money is returned."),
+		"By putting an unused red pocket and currencies into the crafting grid, a red pocket with money is returned."),
 	inventory_image = "redpockets_unused.png",
 	groups = { flammable = 3, redpockets = 1 },
 })
 
-local function on_money_use(itemstack, user, pointed_thing)
+local function on_money_use(itemstack, user)
 	local meta = itemstack:get_meta()
 	local value = meta:get_int("money")
 	if value > 1 then
@@ -107,19 +109,19 @@ local function on_money_use(itemstack, user, pointed_thing)
 		end
 	else
 		if user:is_player() then
-			minetest.chat_send_player(user:get_player_name(),
+			core.chat_send_player(user:get_player_name(),
 				S("This red pocket is corrupted. It does not contain any money."))
 		end
 	end
 	return ItemStack("redpockets:used")
 end
 
-minetest.register_craftitem("redpockets:money", {
+core.register_craftitem("redpockets:money", {
 	description = S("Red Pocket with Money"),
 	_tt_help = S("A money gift, usually given during the Chinese New Year in China."),
 	_doc_items_longdesc = S("A money gift, usually given during the Chinese New Year in China."),
 	_doc_items_usagehelp = S(
-	"Give this little red pocket to whomever you want, right-click with the pocket to take the money out."),
+		"Give this little red pocket to whomever you want, right-click with the pocket to take the money out."),
 	inventory_image = "redpockets_money.png",
 	groups = { not_in_creative_inventory = 1, flammable = 3, redpockets = 1 },
 	on_place = on_money_use,
@@ -127,12 +129,12 @@ minetest.register_craftitem("redpockets:money", {
 	stack_max = 1,
 })
 
-minetest.register_craftitem("redpockets:used", {
+core.register_craftitem("redpockets:used", {
 	description = S("Used Red Pocket"),
 	_tt_help = S("The remains of a red pocket after taking out the money inside it."),
 	_doc_items_longdesc = S("The remains of a red pocket after taking out the money inside it."),
-	_doc_items_usagehelp = S(
-	"The remains of a red pocket, tore in order to take the money out. It cannot be reused, and should end up in a furnace's fuel slot."),
+	_doc_items_usagehelp = S("The remains of a red pocket, tore in order to take the money out. " ..
+		"It cannot be reused, and should end up in a furnace's fuel slot."),
 	inventory_image = "redpockets_used.png",
 	groups = { flammable = 3, redpockets = 1 },
 })
@@ -140,14 +142,14 @@ minetest.register_craftitem("redpockets:used", {
 local recipe = { "redpockets:unused" }
 repeat
 	table.insert(recipe, "group:redpocket_banknotes")
-	minetest.register_craft({
+	core.register_craft({
 		type = "shapeless",
 		output = "redpockets:money",
 		recipe = recipe,
 	})
 until (#recipe == 9)
 
-minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
+core.register_on_craft(function(itemstack, player, old_craft_grid)
 	if itemstack:get_name() ~= "redpockets:money" then return end
 	for _, i in ipairs(old_craft_grid) do
 		if i:get_name() == "redpockets:unused" then
@@ -171,7 +173,7 @@ minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv
 	end
 end)
 
-minetest.register_craft_predict(function(itemstack, player, old_craft_grid, craft_inv)
+core.register_craft_predict(function(itemstack, _, old_craft_grid)
 	if itemstack:get_name() ~= "redpockets:money" then return end
 	for _, i in ipairs(old_craft_grid) do
 		if i:get_name() == "redpockets:unused" then

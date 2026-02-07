@@ -22,15 +22,17 @@
 	SOFTWARE.
 ]]
 
+local S = core.get_translator("redpockets")
+
 local function return_used()
 	return ItemStack("redpockets:used")
 end
 
 local longdesc = S("A money gift, usually given during the Chinese New Year in China.")
-local usagehelp = S("No money can be put into this red pocket due to the absence of the Currency mod. " .. 
-					"This item can only act as a decoration, or as a fuel for furnaces.")
+local usagehelp = S("No money can be put into this red pocket due to the absence of the Currency mod. " ..
+	"This item can only act as a decoration, or as a fuel for furnaces.")
 
-minetest.register_craftitem("redpockets:unused", {
+core.register_craftitem("redpockets:unused", {
 	description = S("Red Pocket"),
 	_tt_help = longdesc,
 	_doc_items_longdesc = longdesc,
@@ -41,7 +43,7 @@ minetest.register_craftitem("redpockets:unused", {
 	groups = { flammable = 3, redpockets = 1 },
 })
 
-minetest.register_craftitem("redpockets:money", {
+core.register_craftitem("redpockets:money", {
 	description = S("Red Pocket"),
 	_tt_help = longdesc,
 	_doc_items_longdesc = longdesc,
@@ -51,7 +53,7 @@ minetest.register_craftitem("redpockets:money", {
 	stack_max = 1,
 })
 
-minetest.register_craftitem("redpockets:used", {
+core.register_craftitem("redpockets:used", {
 	description = S("Red Pocket"),
 	_tt_help = longdesc,
 	_doc_items_longdesc = longdesc,

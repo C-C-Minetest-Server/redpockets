@@ -22,25 +22,25 @@
 	SOFTWARE.
 ]]
 
-local MP = minetest.get_modpath("redpockets") .. DIR_DELIM
+local MP = core.get_modpath("redpockets") .. DIR_DELIM
 
-if minetest.get_modpath("currency") then
+if core.get_modpath("currency") then
 	dofile(MP .. "c_currency.lua")
 else
 	dofile(MP .. "c_none.lua")
 end
 
-minetest.register_craft({
+core.register_craft({
 	type = "fuel",
 	recipe = "group:redpockets",
 	burntime = 1,
 })
 
-if minetest.get_modpath("default") and minetest.get_modpath("dye") then
-	local glue = minetest.get_modpath("mesecons_materials") and "mesecons_materials:glue" or ""
+if core.get_modpath("default") and core.get_modpath("dye") then
+	local glue = core.get_modpath("mesecons_materials") and "mesecons_materials:glue" or ""
 	local paper = "default:paper"
 	local dye = "dye:red"
-	minetest.register_craft({
+	core.register_craft({
 		output = "redpockets:unused",
 		recipe = {
 			{ paper, glue,  paper },
